@@ -54,21 +54,21 @@ set_target_properties(qhttpengine PROPERTIES
 target_include_directories(qhttpengine PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
-    "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>"
+    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
 target_link_libraries(qhttpengine Qt5::Network)
 
 install(TARGETS qhttpengine EXPORT qhttpengine-export
-    RUNTIME DESTINATION "${BIN_INSTALL_DIR}"
-    LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
-    ARCHIVE DESTINATION "${LIB_INSTALL_DIR}"
-    PUBLIC_HEADER DESTINATION "${INCLUDE_INSTALL_DIR}/qhttpengine"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/qhttpengine"
 )
 
 install(EXPORT qhttpengine-export
     FILE        qhttpengineConfig.cmake
-    DESTINATION "${LIB_INSTALL_DIR}/cmake/qhttpengine"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/qhttpengine"
 )
 
 include(CMakePackageConfigHelpers)
@@ -79,10 +79,10 @@ write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/qhttpengineConfigV
 )
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/qhttpengineConfigVersion.cmake"
-    DESTINATION "${LIB_INSTALL_DIR}/cmake/qhttpengine"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/qhttpengine"
 )
 
 configure_file(qhttpengine.pc.in "${CMAKE_CURRENT_BINARY_DIR}/qhttpengine.pc" @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/qhttpengine.pc"
-    DESTINATION "${LIB_INSTALL_DIR}/pkgconfig"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
 )
