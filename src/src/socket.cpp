@@ -25,6 +25,7 @@
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QTcpSocket>
+#include <QUrl>
 
 #include <qhttpengine/parser.h>
 
@@ -273,7 +274,8 @@ qint64 Socket::contentLength() const
 bool Socket::readJson(QJsonDocument &document)
 {
     QJsonParseError error;
-    document = QJsonDocument::fromJson(readAll(), &error);
+    QString decodedUrl = QUrl::fromPercentEncoding(readAll());
+    document = QJsonDocument::fromJson(decodedUrl.toUtf8(), &error);
 
     if (error.error != QJsonParseError::NoError) {
         writeError(Socket::BadRequest);

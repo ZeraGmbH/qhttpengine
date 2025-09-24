@@ -64,6 +64,7 @@ private Q_SLOTS:
     void testRedirect();
     void testSignals();
     void testJson();
+    void testJsonPercentEncoded();
 
 private:
 
@@ -176,6 +177,28 @@ void TestSocket::testJson()
         {"Content-Length", QByteArray::number(data.length())},
         {"Content-Type", "application/json"}
     });
+    client.sendData(data);
+
+    QTRY_VERIFY(server->isHeadersParsed());
+    QTRY_VERIFY(server->bytesAvailable() >= server->contentLength());
+
+    QJsonDocument document;
+    QVERIFY(server->readJson(document));
+    QCOMPARE(document.object(), object);
+}
+
+void TestSocket::testJsonPercentEncoded()
+{
+    CREATE_SOCKET_PAIR();
+
+    QJsonObject object{{"a", "b"}, {"c", 123}};
+    QByteArray data = QJsonDocument(object).toJson();
+    data = QUrl::toPercentEncoding(data);
+
+    client.sendHeaders(Method, Path, QHttpEngine::Socket::HeaderMap{
+                                         {"Content-Length", QByteArray::number(data.length())},
+                                         {"Content-Type", "application/json"}
+                                     });
     client.sendData(data);
 
     QTRY_VERIFY(server->isHeadersParsed());
