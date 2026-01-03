@@ -55,7 +55,16 @@ target_include_directories(qhttpengine PUBLIC
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
-target_link_libraries(qhttpengine Qt5::Network)
+target_link_libraries(qhttpengine
+    PUBLIC
+    ${QTX}::Network
+)
+if("${QT_MAJOR_VER}" STREQUAL "6")
+    target_link_libraries(qhttpengine
+        PRIVATE
+            Qt6::Core5Compat
+    )
+endif()
 
 install(TARGETS qhttpengine EXPORT qhttpengine-export
     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"

@@ -5,4 +5,4 @@ set(SRC
 
 add_library(common STATIC ${SRC})
 
-target_link_libraries(common Qt5::Network qhttpengine)
+target_link_libraries(common ${QTX}::Network qhttpengine)

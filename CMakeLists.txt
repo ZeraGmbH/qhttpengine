@@ -19,7 +19,13 @@ option(BUILD_SHARED_LIBS "Build QHttpEngine as a shared library" ON)
 set(DOC_INSTALL_DIR share/doc/qhttpengine CACHE STRING "Documentation installation directory relative to the install prefix")
 set(EXAMPLES_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/qhttpengine/examples" CACHE STRING "Examples installation directory relative to the install prefix")
 
-find_package(Qt5Network 5.4 REQUIRED)
+set(QT_MAJOR_VER "5" CACHE STRING "Qt major version")
+set(QTX "Qt${QT_MAJOR_VER}")
+
+find_package(${QTX} COMPONENTS Network REQUIRED)
+if("${QT_MAJOR_VER}" STREQUAL "6")
+    find_package(Qt6 COMPONENTS Core5Compat REQUIRED)
+endif()
 
 set(CMAKE_AUTOMOC ON)
 
@@ -38,7 +44,7 @@ endif()
 
 option(BUILD_TESTS "Build the test suite" ON)
 if(BUILD_TESTS)
-    find_package(Qt5Test 5.4 REQUIRED)
+    find_package(${QTX} COMPONENTS Test REQUIRED)
     enable_testing()
     add_subdirectory(tests)
 endif()

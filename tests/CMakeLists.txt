@@ -17,12 +17,16 @@ set(TESTS
     TestSocket
 )
 
-qt5_add_resources(QRC resource.qrc)
+if("${QT_MAJOR_VER}" STREQUAL "6")
+    qt6_add_resources(QRC resource.qrc)
+else()
+    qt5_add_resources(QRC resource.qrc)
+endif()
 
 foreach(TEST ${TESTS})
     add_executable(${TEST} ${TEST}.cpp ${QRC})
     target_include_directories(${TEST} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}")
-    target_link_libraries(${TEST} Qt5::Test qhttpengine common)
+    target_link_libraries(${TEST} ${QTX}::Test qhttpengine common)
     add_test(NAME ${TEST}
         COMMAND ${TEST}
     )
