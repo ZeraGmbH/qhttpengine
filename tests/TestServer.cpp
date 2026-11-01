@@ -99,7 +99,9 @@ void TestServer::testSsl()
     QVERIFY(server.listen(QHostAddress::LocalHost));
 
     QSslSocket socket;
-    socket.setCaCertificates(certs);
+    QSslConfiguration clientConfig = socket.sslConfiguration();
+    clientConfig.setCaCertificates(certs);
+    socket.setSslConfiguration(clientConfig);
     socket.connectToHost(server.serverAddress(), server.serverPort());
     socket.setPeerVerifyName("localhost");
 
